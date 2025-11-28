@@ -1,0 +1,60 @@
+import mongoose, { models, Schema } from "mongoose";
+
+const productoSchema = new Schema(
+  {
+    nombre: {
+      type: String,
+      default: "",
+    },
+    coleccionId: {
+      type: String,
+      default: "",
+    },
+    descripcion: {
+      type: String,
+      default: "",
+    },
+    detalles: {
+      type: String,
+      default: "",
+    },
+    frase: {
+      type: String,
+      default: "",
+    },
+    size: {
+      type: Array,
+      default: [],
+    },
+    imageUrl: {
+      type: String,
+      default: "",
+    },
+    publicId: {
+      type: String,
+      default: "",
+    },
+    imagenes: {
+      type: Array,
+      default: [],
+    },
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
+    precio: {
+      type: Number,
+      default: 0,
+    },
+    stock: {
+      type: Number,
+      default: 0,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const Producto = models.Producto || mongoose.model("Producto", productoSchema);
+export default Producto;

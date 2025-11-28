@@ -10,6 +10,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-montserrat: var(--font-geist-montserrat);
+  --font-poppins: var(--font-geist-poppins);
+  --color-primero: #FFF;
+  --color-segundo: #000;
+  --color-tercero: #FDC700;
+  --color-cuarto: #26A87D;
+  --color-quinto: #FDC700;
 }
 
 @media (prefers-color-scheme: dark) {
