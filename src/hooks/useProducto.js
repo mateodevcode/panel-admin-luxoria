@@ -142,6 +142,12 @@ const useProducto = () => {
     formData.append("isActive", formDataProducto.isActive);
     formData.append("opcion", formDataProducto.opcion);
 
+    // Nuevos campos
+    formData.append("etiquetas", JSON.stringify(formDataProducto.etiquetas));
+    formData.append("descuento", formDataProducto.descuento);
+    formData.append("isPopular", formDataProducto.isPopular);
+    formData.append("isOferta", formDataProducto.isOferta);
+
     if (formDataProducto.opcion === "editar") {
       formData.append("productoId", productoId);
     }

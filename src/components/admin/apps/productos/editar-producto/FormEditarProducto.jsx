@@ -255,6 +255,114 @@ export default function FormEditarProducto({ id }) {
         </div>
       </div>
 
+      {/* Etiquetas */}
+      <div className="w-full flex flex-col gap-2 mt-6">
+        <p className="font-medium text-sm">Etiquetas</p>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {formDataProducto.etiquetas.map((tag, index) => (
+            <span
+              key={index}
+              className="px-3 py-1.5 bg-cuarto/10 text-cuarto text-xs font-medium rounded-full border border-cuarto/20 flex items-center gap-2"
+            >
+              {tag}
+              <X
+                className="w-3 h-3 cursor-pointer hover:text-red-500"
+                onClick={() => {
+                  const newTags = formDataProducto.etiquetas.filter(
+                    (_, i) => i !== index
+                  );
+                  setFormDataProducto({
+                    ...formDataProducto,
+                    etiquetas: newTags,
+                  });
+                }}
+              />
+            </span>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Agregar etiqueta (presiona Enter)"
+            className="bg-transparent focus text-segundo/80 border border-segundo/10 w-full text-sm p-4 rounded-md focus:ring-1 focus:ring-cuarto focus:border-transparent outline-none transition"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                const value = e.target.value.trim();
+                if (value && !formDataProducto.etiquetas.includes(value)) {
+                  setFormDataProducto({
+                    ...formDataProducto,
+                    etiquetas: [...formDataProducto.etiquetas, value],
+                  });
+                  e.target.value = "";
+                }
+              }
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Descuento y Checkboxes */}
+      <div className="w-full flex items-center gap-8 flex-col md:flex-row mt-6">
+        <div className="w-full flex flex-col gap-2">
+          <p className="font-medium text-sm">Descuento (%)</p>
+          <input
+            type="number"
+            placeholder="Descuento"
+            name="descuento"
+            min="0"
+            max="100"
+            value={formDataProducto.descuento}
+            onChange={handleChange}
+            className="bg-transparent focus text-segundo/80 border border-segundo/10 w-full text-sm p-4 rounded-md focus:ring-1 focus:ring-cuarto focus:border-transparent outline-none transition"
+          />
+        </div>
+        <div className="w-full flex flex-col gap-4">
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="isPopular"
+              name="isPopular"
+              checked={formDataProducto.isPopular}
+              onChange={(e) =>
+                setFormDataProducto({
+                  ...formDataProducto,
+                  isPopular: e.target.checked,
+                })
+              }
+              className="w-4 h-4 text-cuarto bg-transparent border-segundo/10 rounded focus:ring-cuarto focus:ring-2 cursor-pointer"
+            />
+            <label
+              htmlFor="isPopular"
+              className="text-sm font-medium text-segundo/70 cursor-pointer"
+            >
+              Producto Popular
+            </label>
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="isOferta"
+              name="isOferta"
+              checked={formDataProducto.isOferta}
+              onChange={(e) =>
+                setFormDataProducto({
+                  ...formDataProducto,
+                  isOferta: e.target.checked,
+                })
+              }
+              className="w-4 h-4 text-cuarto bg-transparent border-segundo/10 rounded focus:ring-cuarto focus:ring-2 cursor-pointer"
+            />
+            <label
+              htmlFor="isOferta"
+              className="text-sm font-medium text-segundo/70 cursor-pointer"
+            >
+              En Oferta
+            </label>
+          </div>
+        </div>
+      </div>
+
       {/* Tamaños */}
       <div className="w-full flex items-center gap-8 flex-col md:flex-row mt-6">
         <div className="w-full flex flex-col gap-2">

@@ -24,6 +24,13 @@ export async function POST(req) {
     const opcion = formData.get("opcion");
     const productoId = formData.get("productoId");
 
+    // Nuevos campos
+    const etiquetasString = formData.get("etiquetas");
+    const etiquetas = etiquetasString ? JSON.parse(etiquetasString) : [];
+    const descuento = formData.get("descuento");
+    const isPopular = formData.get("isPopular");
+    const isOferta = formData.get("isOferta");
+
     // Obtener múltiples archivos
     const files = formData.getAll("files");
 
@@ -125,6 +132,10 @@ export async function POST(req) {
         size: size || [],
         imagenes: imagenesArray,
         isActive: isActive === "true" || isActive === true,
+        etiquetas: etiquetas || [],
+        descuento: descuento || 0,
+        isPopular: isPopular === "true" || isPopular === true,
+        isOferta: isOferta === "true" || isOferta === true,
         ...(uploadResponse && {
           publicId: uploadResponse.fileId,
           imageUrl: uploadResponse.url,
@@ -158,6 +169,12 @@ export async function POST(req) {
       }
       if (isActive !== undefined)
         updates.isActive = isActive === "true" || isActive === true;
+      if (etiquetas) updates.etiquetas = etiquetas;
+      if (descuento !== undefined) updates.descuento = descuento;
+      if (isPopular !== undefined)
+        updates.isPopular = isPopular === "true" || isPopular === true;
+      if (isOferta !== undefined)
+        updates.isOferta = isOferta === "true" || isOferta === true;
       if (uploadResponse) {
         updates.publicId = uploadResponse.fileId;
         updates.imageUrl = uploadResponse.url;

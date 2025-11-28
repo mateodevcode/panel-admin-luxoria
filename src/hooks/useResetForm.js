@@ -152,6 +152,10 @@ const useResetForm = () => {
       isActive: false,
       precio: 0,
       stock: 0,
+      isPopular: false,
+      isOferta: false,
+      descuento: 0,
+      etiquetas: [],
       opcion: "crear",
     });
   };

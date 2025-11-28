@@ -50,6 +50,22 @@ const productoSchema = new Schema(
       type: Number,
       default: 0,
     },
+    etiquetas: {
+      type: Array,
+      default: [],
+    },
+    descuento: {
+      type: Number,
+      default: 0,
+    },
+    isPopular: {
+      type: Boolean,
+      default: false,
+    },
+    isOferta: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

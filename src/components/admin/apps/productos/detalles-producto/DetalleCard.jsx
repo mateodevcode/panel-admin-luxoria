@@ -40,9 +40,21 @@ const DetalleCard = ({ id }) => {
     <div className="bg-primero rounded-lg p-6 w-full md:w-[65%] flex flex-col font-poppins gap-6 overflow-y-auto max-h-[80vh]">
       {/* Título */}
       <div>
-        <h3 className="font-bold text-segundo text-2xl">
-          {productoSeleccionado.nombre}
-        </h3>
+        <div className="flex items-center gap-2 flex-wrap">
+          <h3 className="font-bold text-segundo text-2xl">
+            {productoSeleccionado.nombre}
+          </h3>
+          {productoSeleccionado.isPopular && (
+            <span className="px-3 py-1 bg-amber-500/20 text-amber-600 text-xs font-bold rounded-full border border-amber-500/30 flex items-center gap-1">
+              ⭐ Popular
+            </span>
+          )}
+          {productoSeleccionado.isOferta && (
+            <span className="px-3 py-1 bg-red-500/20 text-red-600 text-xs font-bold rounded-full border border-red-500/30 flex items-center gap-1">
+              🔥 En Oferta
+            </span>
+          )}
+        </div>
         <p className="text-sm text-segundo/60 mt-1">
           ID: {productoSeleccionado._id}
         </p>
@@ -140,9 +152,28 @@ const DetalleCard = ({ id }) => {
             <DollarSign className="w-4 h-4 text-cuarto" />
             Precio
           </h4>
-          <p className="text-lg font-bold text-cuarto">
-            {formatoDinero(productoSeleccionado.precio)}
-          </p>
+          <div className="flex items-center gap-2 flex-wrap">
+            {productoSeleccionado.descuento > 0 ? (
+              <>
+                <p className="text-lg font-bold text-cuarto">
+                  {formatoDinero(
+                    productoSeleccionado.precio *
+                      (1 - productoSeleccionado.descuento / 100)
+                  )}
+                </p>
+                <p className="text-sm text-segundo/50 line-through">
+                  {formatoDinero(productoSeleccionado.precio)}
+                </p>
+                <span className="px-2 py-0.5 bg-red-500/20 text-red-600 text-xs font-bold rounded">
+                  -{productoSeleccionado.descuento}%
+                </span>
+              </>
+            ) : (
+              <p className="text-lg font-bold text-cuarto">
+                {formatoDinero(productoSeleccionado.precio)}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Stock */}
@@ -181,6 +212,24 @@ const DetalleCard = ({ id }) => {
           </div>
         </div>
       )}
+
+      {/* Etiquetas */}
+      {productoSeleccionado.etiquetas &&
+        productoSeleccionado.etiquetas.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <h4 className="font-semibold text-segundo/80 text-sm">Etiquetas</h4>
+            <div className="flex flex-wrap gap-2">
+              {productoSeleccionado.etiquetas.map((tag, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1.5 bg-purple-500/10 text-purple-600 text-xs font-medium rounded-full border border-purple-500/20"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
       {/* Estado */}
       <div className="flex flex-col gap-2 border-t border-segundo/20 pt-4">
