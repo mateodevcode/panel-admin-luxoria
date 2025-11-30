@@ -95,7 +95,7 @@ const Dashboard = () => {
 
   if (loading || !datos) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen font-poppins">
         <div className="animate-spin w-12 h-12 border-4 border-segundo/20 border-t-cuarto rounded-full"></div>
       </div>
     );

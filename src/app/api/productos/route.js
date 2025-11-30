@@ -11,7 +11,7 @@ export async function GET(req) {
   try {
     await connectMongoDB();
 
-    const productos = await Producto.find({});
+    const productos = await Producto.find({}).sort({ createdAt: -1 });
     return NextResponse.json(
       {
         success: true,

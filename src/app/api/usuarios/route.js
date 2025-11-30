@@ -39,7 +39,7 @@ export async function POST(req) {
   try {
     await connectMongoDB();
     const data = await req.json();
-    const pass = await bcrypt.hash(`Seventwo${data.NIT}*2025`, 10);
+    const pass = await bcrypt.hash(data.password, 10);
     const nuevoUsuario = await Usuario.create({
       ...data,
       password: pass,

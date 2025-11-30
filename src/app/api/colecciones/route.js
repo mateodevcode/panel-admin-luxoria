@@ -11,7 +11,7 @@ export async function GET(req) {
   try {
     await connectMongoDB();
 
-    const colecciones = await Coleccion.find({});
+    const colecciones = await Coleccion.find({}).sort({ createdAt: -1 });
     return NextResponse.json(
       {
         success: true,

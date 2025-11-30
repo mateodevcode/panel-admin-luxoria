@@ -1,14 +1,11 @@
 import {
-  Bell,
   Blocks,
-  CalendarDays,
-  FileText,
+  LayoutPanelTop,
   LogOut,
   PackageOpen,
   Settings,
   SquareKanban,
   SquareUser,
-  Ticket,
   Users,
 } from "lucide-react";
 
@@ -68,12 +65,16 @@ export const enlacesApps = [
       },
     ],
   },
-
   // {
-  //   nombre: "Calendario",
-  //   icono: <CalendarDays className="w-5" />,
-  //   enlace: "/apps/calendario",
-  //   subEnlaces: [],
+  //   nombre: "Page Principal",
+  //   icono: <LayoutPanelTop className="w-5" />,
+  //   enlace: "/apps/page-principal",
+  //   subEnlaces: [
+  //     {
+  //       nombre: "Footer",
+  //       enlace: "/apps/page-principal/footer",
+  //     },
+  //   ],
   // },
   {
     nombre: "Usuarios",
