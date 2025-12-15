@@ -69,7 +69,7 @@ const SidebarEnlace = ({ enlaces, titulo }) => {
               `}
             >
               <div className="flex items-center gap-3 w-full">
-                <div className="w-5 flex-shrink-0">{enlace.icono}</div>
+                <div className="w-5 shrink-0">{enlace.icono}</div>
                 {isSidebarOpen && (
                   <motion.span
                     key={enlace.nombre}

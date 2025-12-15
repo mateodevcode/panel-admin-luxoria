@@ -22,6 +22,10 @@ const coleccionSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    url: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

@@ -4,6 +4,7 @@ import { connectMongoDB } from "@/lib/db";
 import { deleteFromS3, fileToBuffer, uploadToS3 } from "@/lib/s3/s3AWS";
 import { formatearNombreMayus } from "@/libs/formatearNombreMayus";
 import Producto from "@/models/producto";
+import { formaterNombreToUrl } from "@/libs/formaterNombreToUrl";
 
 export async function POST(req) {
   try {
@@ -140,6 +141,7 @@ export async function POST(req) {
           publicId: uploadResponse.fileId,
           imageUrl: uploadResponse.url,
         }),
+        url: formaterNombreToUrl(frase),
       });
 
       return NextResponse.json(
