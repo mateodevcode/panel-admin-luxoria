@@ -52,7 +52,9 @@ export async function POST(req) {
     await connectMongoDB();
     const data = await req.json();
 
-    const errores = registrarseValidate(data);
+    const allUsers = await Usuario.find();
+
+    const errores = registrarseValidate(data, allUsers);
     if (errores.length > 0) {
       return NextResponse.json(
         {

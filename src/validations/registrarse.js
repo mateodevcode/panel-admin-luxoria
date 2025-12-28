@@ -41,9 +41,5 @@ export function registrarseValidate(datos, allusers, validarPassword) {
     );
   }
 
-  if (datos.password !== validarPassword) {
-    errores.push("Las contraseñas no coinciden.");
-  }
-
   return errores;
 }
