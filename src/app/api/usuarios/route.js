@@ -4,12 +4,21 @@ import { validateApiKey } from "@/lib/validateApiKey";
 import Usuario from "@/models/usuario";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { registrarseValidate } from "@/validations/registrarse";
+import {
+  registerLimiter,
+  defaultLimiter,
+  checkRateLimit,
+} from "@/lib/rateLimit";
 
 export async function GET(req) {
-  const isValid = validateApiKey(req);
-  if (isValid !== true) return isValid;
-
   try {
+    const isValid = validateApiKey(req);
+    if (isValid !== true) return isValid;
+
+    const rateLimitResponse = checkRateLimit(req, defaultLimiter);
+    if (rateLimitResponse !== true) return rateLimitResponse;
+
     await connectMongoDB();
 
     const usuarios = await Usuario.find({});
@@ -33,12 +42,27 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  const isValid = validateApiKey(req);
-  if (isValid !== true) return isValid;
-
   try {
+    const isValid = validateApiKey(req);
+    if (isValid !== true) return isValid;
+
+    const rateLimitResponse = checkRateLimit(req, registerLimiter);
+    if (rateLimitResponse !== true) return rateLimitResponse;
+
     await connectMongoDB();
     const data = await req.json();
+
+    const errores = registrarseValidate(data);
+    if (errores.length > 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: errores[0],
+        },
+        { status: 400 }
+      );
+    }
+
     const pass = await bcrypt.hash(data.password, 10);
     const nuevoUsuario = await Usuario.create({
       ...data,
