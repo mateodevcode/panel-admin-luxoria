@@ -6,15 +6,35 @@ const coleccionSchema = new Schema(
       type: String,
       default: "",
     },
-    descripcion: {
+    frase: {
       type: String,
       default: "",
     },
-    imageUrl: {
+    caracteristicas: {
+      type: Array,
+      default: [],
+    },
+    imageUrlHor: {
       type: String,
       default: "",
     },
-    publicId: {
+    publicIdHor: {
+      type: String,
+      default: "",
+    },
+    imageUrlVer: {
+      type: String,
+      default: "",
+    },
+    publicIdVer: {
+      type: String,
+      default: "",
+    },
+    imageUrlPortada: {
+      type: String,
+      default: "",
+    },
+    publicIdPortada: {
       type: String,
       default: "",
     },

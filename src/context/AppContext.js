@@ -167,10 +167,16 @@ export const AppProvider = ({ children }) => {
   });
   const [formDataColeccion, setFormDataColeccion] = useState({
     nombre: "",
-    descripcion: "",
-    imageUrl: "",
-    publicId: "",
+    frase: "",
+    caracteristicas: [],
+    imageUrlHor: "",
+    imageUrlVer: "",
+    imageUrlPortada: "",
+    publicIdHor: "",
+    publicIdVer: "",
+    publicIdPortada: "",
     isActive: false,
+    url: "",
     opcion: "crear",
   });
   const [colecciones, setColecciones] = useState([]);
@@ -185,6 +191,7 @@ export const AppProvider = ({ children }) => {
     imageUrl: "",
     publicId: "",
     imagenes: [],
+    tipo: "",
     isActive: false,
     precio: 0,
     stock: 0,

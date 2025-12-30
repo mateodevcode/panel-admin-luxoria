@@ -139,6 +139,7 @@ const useProducto = () => {
     formData.append("precio", formDataProducto.precio);
     formData.append("stock", formDataProducto.stock);
     formData.append("size", JSON.stringify(formDataProducto.size));
+    formData.append("tipo", formDataProducto.tipo);
     formData.append("isActive", formDataProducto.isActive);
     formData.append("opcion", formDataProducto.opcion);
 

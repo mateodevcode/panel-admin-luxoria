@@ -21,6 +21,7 @@ export async function POST(req) {
     const stock = formData.get("stock");
     const sizeString = formData.get("size");
     const size = sizeString ? JSON.parse(sizeString) : [];
+    const tipo = formData.get("tipo");
     const isActive = formData.get("isActive");
     const opcion = formData.get("opcion");
     const productoId = formData.get("productoId");
@@ -132,6 +133,7 @@ export async function POST(req) {
         stock: stock || 0,
         size: size || [],
         imagenes: imagenesArray,
+        tipo: tipo || "otro",
         isActive: isActive === "true" || isActive === true,
         etiquetas: etiquetas || [],
         descuento: descuento || 0,
@@ -141,7 +143,7 @@ export async function POST(req) {
           publicId: uploadResponse.fileId,
           imageUrl: uploadResponse.url,
         }),
-        url: formaterNombreToUrl(frase),
+        url: formaterNombreToUrl(nombre),
       });
 
       return NextResponse.json(
@@ -169,6 +171,7 @@ export async function POST(req) {
       if (imagenesArray && imagenesArray.length > 0) {
         updates.imagenes = imagenesArray;
       }
+      if (tipo) updates.tipo = tipo;
       if (isActive !== undefined)
         updates.isActive = isActive === "true" || isActive === true;
       if (etiquetas) updates.etiquetas = etiquetas;

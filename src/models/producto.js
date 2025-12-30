@@ -38,6 +38,10 @@ const productoSchema = new Schema(
       type: Array,
       default: [],
     },
+    tipo: {
+      type: String,
+      default: "",
+    },
     isActive: {
       type: Boolean,
       default: false,

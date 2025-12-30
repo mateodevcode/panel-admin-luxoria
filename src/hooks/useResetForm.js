@@ -130,10 +130,16 @@ const useResetForm = () => {
   const resetFormDataColeccion = () => {
     setFormDataColeccion({
       nombre: "",
-      descripcion: "",
-      imageUrl: "",
-      publicId: "",
+      frase: "",
+      caracteristicas: [],
+      imageUrlHor: "",
+      imageUrlVer: "",
+      imageUrlPortada: "",
+      publicIdHor: "",
+      publicIdVer: "",
+      publicIdPortada: "",
       isActive: false,
+      url: "",
       opcion: "crear",
     });
   };
@@ -149,6 +155,7 @@ const useResetForm = () => {
       imageUrl: "",
       publicId: "",
       imagenes: [],
+      tipo: "",
       isActive: false,
       precio: 0,
       stock: 0,

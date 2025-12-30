@@ -42,7 +42,7 @@ const ListaColeccionesCards = ({ search }) => {
           className="bg-primero rounded-lg overflow-hidden relative p-4"
         >
           {/* Header */}
-          <div className="pb-4 flex justify-between items-center">
+          <div className="flex justify-between items-center">
             <h3 className="font-bold text-segundo/80 text-lg">
               {colecciones.nombre}
             </h3>
@@ -88,14 +88,47 @@ const ListaColeccionesCards = ({ search }) => {
             </div>
           </div>
 
-          {/* Imagen */}
-          <div className="relative w-full h-60">
+          <div>
+            <p>{colecciones.frase}</p>
+          </div>
+
+          {/* Imagen horizontal */}
+          <div className="relative w-full h-44 mt-4">
             <Image
-              src={colecciones.imageUrl}
+              src={colecciones.imageUrlHor}
               alt={colecciones.nombre}
               fill
               className="object-cover rounded-lg"
             />
+            <p className="absolute bottom-0 left-0 py-2 px-6 bg-segundo/50 text-primero">
+              Imagen horizontal
+            </p>
+          </div>
+
+          {/* Imagen vertical */}
+          <div className="relative w-full h-44 mt-4">
+            <Image
+              src={colecciones.imageUrlVer}
+              alt={colecciones.nombre}
+              fill
+              className="object-cover rounded-lg"
+            />
+            <p className="absolute bottom-0 left-0 py-2 px-6 bg-segundo/50 text-primero">
+              Imagen Vertical
+            </p>
+          </div>
+
+          {/* Imagen portada */}
+          <div className="relative w-full h-44 mt-4">
+            <Image
+              src={colecciones.imageUrlPortada}
+              alt={colecciones.nombre}
+              fill
+              className="object-cover rounded-lg"
+            />
+            <p className="absolute bottom-0 left-0 py-2 px-6 bg-segundo/50 text-primero">
+              Imagen Portada
+            </p>
           </div>
 
           <div className="space-y-3 mt-4">

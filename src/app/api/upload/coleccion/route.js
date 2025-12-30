@@ -11,9 +11,15 @@ export async function POST(req) {
     await connectMongoDB();
 
     const formData = await req.formData();
-    const file = formData.get("file");
+    const fileImgVer = formData.get("fileImgVer");
+    const fileImgHor = formData.get("fileImgHor");
+    const fileImgPortada = formData.get("fileImgPortada");
     const nombre = formData.get("nombre");
-    const descripcion = formData.get("descripcion");
+    const frase = formData.get("frase");
+    const caracteristicasStr = formData.get("caracteristicas");
+    const caracteristicas = caracteristicasStr
+      ? JSON.parse(caracteristicasStr)
+      : [];
     const isActive = formData.get("isActive");
     const opcion = formData.get("opcion");
     const coleccionId = formData.get("coleccionId");
@@ -25,28 +31,32 @@ export async function POST(req) {
       );
     }
 
-    let uploadResponse = null;
-    let oldPublicId = null;
+    let uploadResponseVer = null;
+    let oldPublicIdVer = null;
+    let uploadResponseHor = null;
+    let oldPublicIdHor = null;
+    let uploadResponsePortada = null;
+    let oldPublicIdPortada = null;
 
-    // Procesar imagen si se envió
-    if (file && file.size > 0) {
-      if (!file.type.startsWith("image/")) {
+    // Procesar imagen si se envió Ver
+    if (fileImgVer && fileImgVer.size > 0) {
+      if (!fileImgVer.type.startsWith("image/")) {
         return NextResponse.json(
           { success: false, error: "Solo se permiten imágenes." },
           { status: 400 }
         );
       }
 
-      if (file.size > 10 * 1024 * 1024) {
+      if (fileImgVer.size > 10 * 1024 * 1024) {
         return NextResponse.json(
           { success: false, error: "La imagen debe pesar menos de 10MB." },
           { status: 400 }
         );
       }
 
-      const buffer = await fileToBuffer(file);
+      const buffer = await fileToBuffer(fileImgVer);
       const carpeta = process.env.AWS_BUCKET_SUBFOLDER || "ecommerce/luxoria";
-      const fileName = `${carpeta}/coleccion_${(nombre || "imagen")
+      const fileName = `${carpeta}/coleccion_${(nombre || "imagen_vertical")
         .toLowerCase()
         .replace(/\s+/g, "-")}_${Date.now()}.jpg`;
 
@@ -58,11 +68,87 @@ export async function POST(req) {
             { status: 404 }
           );
         }
-        oldPublicId = coleccion.publicId;
+        oldPublicIdVer = coleccion.publicIdVer;
       }
 
-      const url = await uploadToS3(buffer, fileName, file.type);
-      uploadResponse = { fileId: fileName, url };
+      const url = await uploadToS3(buffer, fileName, fileImgVer.type);
+      uploadResponseVer = { fileId: fileName, url };
+    }
+
+    // Procesar imagen si se envió Hor
+    if (fileImgHor && fileImgHor.size > 0) {
+      if (!fileImgHor.type.startsWith("image/")) {
+        // ✅ CORREGIDO: fileImgHor en lugar de fileImgVer
+        return NextResponse.json(
+          { success: false, error: "Solo se permiten imágenes." },
+          { status: 400 }
+        );
+      }
+
+      if (fileImgHor.size > 10 * 1024 * 1024) {
+        return NextResponse.json(
+          { success: false, error: "La imagen debe pesar menos de 10MB." },
+          { status: 400 }
+        );
+      }
+
+      const buffer = await fileToBuffer(fileImgHor);
+      const carpeta = process.env.AWS_BUCKET_SUBFOLDER || "ecommerce/luxoria";
+      const fileName = `${carpeta}/coleccion_${(nombre || "imagen_horizontal")
+        .toLowerCase()
+        .replace(/\s+/g, "-")}_${Date.now()}.jpg`;
+
+      if (opcion === "editar") {
+        const coleccion = await Coleccion.findById(coleccionId);
+        if (!coleccion) {
+          return NextResponse.json(
+            { success: false, error: "Coleccion no encontrada." },
+            { status: 404 }
+          );
+        }
+        oldPublicIdHor = coleccion.publicIdHor;
+      }
+
+      const url = await uploadToS3(buffer, fileName, fileImgHor.type);
+      uploadResponseHor = { fileId: fileName, url };
+    }
+
+    // Procesar imagen si se envió Portada
+    if (fileImgPortada && fileImgPortada.size > 0) {
+      if (!fileImgPortada.type.startsWith("image/")) {
+        // ✅ CORREGIDO: fileImgPortada
+        return NextResponse.json(
+          { success: false, error: "Solo se permiten imágenes." },
+          { status: 400 }
+        );
+      }
+
+      if (fileImgPortada.size > 10 * 1024 * 1024) {
+        return NextResponse.json(
+          { success: false, error: "La imagen debe pesar menos de 10MB." },
+          { status: 400 }
+        );
+      }
+
+      const buffer = await fileToBuffer(fileImgPortada);
+      const carpeta = process.env.AWS_BUCKET_SUBFOLDER || "ecommerce/luxoria";
+      const fileName = `${carpeta}/coleccion_${(nombre || "imagen_portada")
+        .toLowerCase()
+        .replace(/\s+/g, "-")}_${Date.now()}.jpg`;
+
+      if (opcion === "editar") {
+        const coleccion = await Coleccion.findById(coleccionId);
+        if (!coleccion) {
+          return NextResponse.json(
+            { success: false, error: "Coleccion no encontrada." },
+            { status: 404 }
+          );
+        }
+        oldPublicIdPortada = coleccion.publicIdPortada;
+      }
+
+      const url = await uploadToS3(buffer, fileName, fileImgPortada.type);
+      uploadResponsePortada = { fileId: fileName, url };
     }
 
     // CREAR
@@ -76,11 +162,20 @@ export async function POST(req) {
 
       const nuevaColeccion = await Coleccion.create({
         nombre: formatearNombreMayus(nombre),
-        descripcion: descripcion || "",
+        frase: frase || "",
+        caracteristicas: caracteristicas || [],
         isActive: isActive || false,
-        ...(uploadResponse && {
-          publicId: uploadResponse.fileId,
-          imageUrl: uploadResponse.url,
+        ...(uploadResponseVer && {
+          publicIdVer: uploadResponseVer.fileId,
+          imageUrlVer: uploadResponseVer.url,
+        }),
+        ...(uploadResponseHor && {
+          publicIdHor: uploadResponseHor.fileId,
+          imageUrlHor: uploadResponseHor.url,
+        }),
+        ...(uploadResponsePortada && {
+          publicIdPortada: uploadResponsePortada.fileId,
+          imageUrlPortada: uploadResponsePortada.url,
         }),
         url: formaterNombreToUrl(nombre),
       });
@@ -100,11 +195,21 @@ export async function POST(req) {
       const updates = {};
 
       if (nombre) updates.nombre = formatearNombreMayus(nombre);
-      if (descripcion) updates.descripcion = descripcion;
+      if (frase) updates.frase = frase;
+      if (caracteristicas && caracteristicas.length > 0)
+        updates.caracteristicas = caracteristicas;
       if (isActive) updates.isActive = isActive;
-      if (uploadResponse) {
-        updates.publicId = uploadResponse.fileId;
-        updates.imageUrl = uploadResponse.url;
+      if (uploadResponseVer) {
+        updates.publicIdVer = uploadResponseVer.fileId;
+        updates.imageUrlVer = uploadResponseVer.url;
+      }
+      if (uploadResponseHor) {
+        updates.publicIdHor = uploadResponseHor.fileId;
+        updates.imageUrlHor = uploadResponseHor.url;
+      }
+      if (uploadResponsePortada) {
+        updates.publicIdPortada = uploadResponsePortada.fileId;
+        updates.imageUrlPortada = uploadResponsePortada.url;
       }
 
       const coleccionExistente = await Coleccion.findById(coleccionId);
@@ -123,10 +228,28 @@ export async function POST(req) {
         }
       );
 
-      // Eliminar imagen anterior si hay nueva
-      if (uploadResponse && oldPublicId) {
+      // Eliminar imagen anterior si hay nueva Ver
+      if (uploadResponseVer && oldPublicIdVer) {
         try {
-          await deleteFromS3(oldPublicId);
+          await deleteFromS3(oldPublicIdVer);
+        } catch (err) {
+          console.warn("No se pudo eliminar imagen antigua:", err.message);
+        }
+      }
+
+      // Eliminar imagen anterior si hay nueva Hor
+      if (uploadResponseHor && oldPublicIdHor) {
+        try {
+          await deleteFromS3(oldPublicIdHor);
+        } catch (err) {
+          console.warn("No se pudo eliminar imagen antigua:", err.message);
+        }
+      }
+
+      // Eliminar imagen anterior si hay nueva Portada
+      if (uploadResponsePortada && oldPublicIdPortada) {
+        try {
+          await deleteFromS3(oldPublicIdPortada);
         } catch (err) {
           console.warn("No se pudo eliminar imagen antigua:", err.message);
         }
@@ -184,7 +307,7 @@ export async function GET(req) {
       );
     }
 
-    // Obtener todos los barberos con filtro opcional
+    // Obtener todos los colecciones con filtro opcional
     let query = {};
     if (estado) {
       query.estado = estado;

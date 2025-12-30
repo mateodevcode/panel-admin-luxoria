@@ -10,6 +10,8 @@ import { Listbox } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
 import { buscarColeccion } from "@/libs/buscarColeccion";
 import { sizesLetras, sizesNumeros } from "@/data/sizesProductos";
+import { tipoProducto } from "@/data/data.tipo";
+import Image from "next/image";
 
 export default function FormAgregarProducto() {
   const { formDataProducto, setFormDataProducto, colecciones } =
@@ -263,6 +265,61 @@ export default function FormAgregarProducto() {
         </div>
       </div>
 
+      {/* Tipo */}
+      <div className="flex flex-col w-full md:w-1/2 mt-6">
+        <span className="font-medium text-sm">Seleciona un tipo</span>
+        <div className="relative flex-1 rounded-sm mt-6">
+          <Listbox
+            value={formDataProducto.tipo}
+            onChange={(tipo) =>
+              setFormDataProducto((prev) => ({ ...prev, tipo }))
+            }
+          >
+            {({ open }) => (
+              <div>
+                <Listbox.Button className="bg-transparent focus text-segundo/80 border border-segundo/10 w-full text-sm p-4 rounded-md focus:ring-1 focus:ring-cuarto focus:border-transparent outline-none transition">
+                  {formDataProducto.tipo ? (
+                    <div className="flex items-center gap-3">
+                      <span className="capitalize">
+                        {formDataProducto.tipo}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="flex items-center gap-3">
+                      Selecciona una colección
+                    </span>
+                  )}
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <ChevronDown className="h-4 w-4 text-segundo/70" />
+                  </span>
+                </Listbox.Button>
+
+                {open && (
+                  <Listbox.Options
+                    className="absolute z-10 mt-2 w-full bg-primero border border-segundo/10 text-segundo/70 rounded-md shadow-lg max-h-60 overflow-y-auto text-sm scrollbar-thin scrollbar-thumb-gray-400/40 scrollbar-track-transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-400/60
+          [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-transparent"
+                  >
+                    {tipoProducto.map((tipoPro, index) => (
+                      <Listbox.Option
+                        key={index}
+                        value={tipoPro}
+                        className={({ active, selected }) =>
+                          `cursor-pointer px-4 py-2 ${
+                            active ? "bg-segundo/5" : ""
+                          } ${selected ? "text-segundo bg-segundo/10" : ""}`
+                        }
+                      >
+                        {tipoPro}
+                      </Listbox.Option>
+                    ))}
+                  </Listbox.Options>
+                )}
+              </div>
+            )}
+          </Listbox>
+        </div>
+      </div>
+
       {/* Descuento y Checkboxes */}
       <div className="w-full flex items-center gap-8 flex-col md:flex-row mt-6">
         <div className="w-full flex flex-col gap-2">
@@ -439,9 +496,11 @@ export default function FormAgregarProducto() {
           <div className="h-80 rounded-md flex items-center justify-center">
             {preview || formDataProducto.imageUrl ? (
               <div className="relative w-full h-full">
-                <img
+                <Image
                   src={preview || formDataProducto.imageUrl}
                   alt="Vista previa"
+                  width={500}
+                  height={500}
                   className="w-full h-full object-cover rounded-md"
                 />
                 <Link
@@ -518,9 +577,11 @@ export default function FormAgregarProducto() {
                 key={index}
                 className="relative group rounded-md overflow-hidden border border-gray-200 hover:border-cuarto transition-colors"
               >
-                <img
+                <Image
                   src={preview.url}
                   alt={`Preview ${index + 1}`}
+                  width={500}
+                  height={500}
                   className="w-full h-32 object-cover"
                 />
                 <button
