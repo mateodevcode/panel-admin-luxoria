@@ -1,6 +1,6 @@
 "use client";
 
-import { Bolt, FileType } from "lucide-react";
+import { Bolt } from "lucide-react";
 import React, { useContext } from "react";
 import { AppContext } from "@/context/AppContext";
 import Image from "next/image";
@@ -11,6 +11,8 @@ const DetalleCard = ({ id }) => {
 
   const coleccionSeleccionada =
     colecciones?.find((cole) => cole._id === id) || {};
+
+  const carac = coleccionSeleccionada.caracteristicas || [];
 
   if (!id) {
     return (
@@ -26,34 +28,80 @@ const DetalleCard = ({ id }) => {
   }
 
   return (
-    <div className="bg-primero rounded-lg p-6 w-full md:w-[65%] aspect-square flex flex-col font-poppins">
+    <div className="bg-primero rounded-lg p-6 w-full md:w-[65%] aspect-square flex flex-col font-poppins gap-2">
       <h3 className="font-bold text-segundo/80 text-lg">
         {coleccionSeleccionada.nombre}
       </h3>
-      <div className="relative mt-2">
-        <Image
-          src={coleccionSeleccionada.imageUrl || "/colecciones/coleccion.png"}
-          alt={coleccionSeleccionada.nombre || "Colección"}
-          width={500}
-          height={500}
-          className="w-full h-auto rounded-lg"
-          loading="eager"
-        />
+      <div>
+        <p>{coleccionSeleccionada.frase}</p>
       </div>
 
-      <div className="">
-        <p className="text-sm text-segundo/70 flex items-center gap-1 mt-4">
-          <FileType className="w-4 h-4 text-cuarto" />{" "}
-          {coleccionSeleccionada.descripcion}
+      {/* Imagen horizontal */}
+      <div className="relative w-full h-44 mt-4">
+        <Image
+          src={
+            coleccionSeleccionada.imageUrlHor || "/colecciones/coleccion.png"
+          }
+          alt={coleccionSeleccionada.nombre || "images"}
+          fill
+          className="object-cover rounded-lg"
+        />
+        <p className="absolute bottom-0 left-0 py-2 px-6 bg-segundo/50 text-primero">
+          Imagen horizontal
         </p>
+      </div>
 
-        <div className="flex flex-col gap-4 text-segundo/70 text-sm border-t border-segundo/20 pt-3 mt-4">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <Bolt className="w-4 h-4 text-cuarto" />{" "}
-              {coleccionSeleccionada.isActive ? "Activo" : "Inactivo"}
+      {/* Imagen vertical */}
+      <div className="relative w-full h-44 mt-4">
+        <Image
+          src={
+            coleccionSeleccionada.imageUrlVer || "/colecciones/coleccion.png"
+          }
+          alt={coleccionSeleccionada.nombre || "images"}
+          fill
+          className="object-cover rounded-lg"
+        />
+        <p className="absolute bottom-0 left-0 py-2 px-6 bg-segundo/50 text-primero">
+          Imagen Vertical
+        </p>
+      </div>
+
+      {/* Imagen portada */}
+      <div className="relative w-full h-44 mt-4">
+        <Image
+          src={
+            coleccionSeleccionada.imageUrlPortada ||
+            "/colecciones/coleccion.png"
+          }
+          alt={coleccionSeleccionada.nombre || "images"}
+          fill
+          className="object-cover rounded-lg"
+        />
+        <p className="absolute bottom-0 left-0 py-2 px-6 bg-segundo/50 text-primero">
+          Imagen Portada
+        </p>
+      </div>
+
+      <div className="mt-2 flex items-center gap-2">
+        Tipo:
+        {carac.map((cara, index) => {
+          return (
+            <span
+              key={index}
+              className="bg-cuarto hover:bg-cuarto/80 text-primero px-4 py-2 rounded-full font-medium transition text-xs"
+            >
+              {cara}
             </span>
-          </div>
+          );
+        })}
+      </div>
+
+      <div className="flex flex-col gap-4 text-segundo/70 text-sm border-t border-segundo/20 pt-3 mt-4">
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-1">
+            <Bolt className="w-4 h-4 text-cuarto" />{" "}
+            {coleccionSeleccionada.isActive ? "Activo" : "Inactivo"}
+          </span>
         </div>
       </div>
     </div>
