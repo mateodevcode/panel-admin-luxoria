@@ -94,10 +94,8 @@ export async function GET(req) {
     return NextResponse.json(
       {
         success: true,
-        data: {
-          ordenes,
-          total: ordenes.length,
-        },
+        message: "Ordenes obtenidas correctamente",
+        data: ordenes,
       },
       { status: 200 }
     );
